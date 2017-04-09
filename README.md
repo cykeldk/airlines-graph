@@ -10,4 +10,4 @@
 
 - [ ] 4 Finding airline that has widest coverage (Minimum Spanning Tree)
 
-Defend the choice of datastructure with regard of time and space complexity (Big O)
+- [x] Defend the choice of datastructure with regard of time and space complexity (Big O)
