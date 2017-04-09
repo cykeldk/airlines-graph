@@ -119,6 +119,31 @@ def djikstra_distance(origin, destination, original=None, queue=[]):
     queue = queue[:-1]
     return djikstra_distance(next_vertex, destination, original, queue)
 
+def djikstra_time(origin, destination, original=None, queue=[]):
+    transit_time = 60
+    if not original:
+        original = origin
+    cost_table[origin]['visited']=True
+    if origin == destination:
+        print('found destination')
+        return backtrack_cost_table(original, destination)
+    for e in edges:
+        if e['source_code']==origin:
+            if cost_table[destination]['visited']== False:
+                queue.append(destination)
+
+            if float(e['time']) + transit_time + cost_table[origin]['cost'] < cost_table[destination]['cost']:
+                cost_table[destination]['cost'] = float(e['distance']) + cost_table[origin]['cost'] + transit_time
+                cost_table[destination]['parent']= origin
+
+    if len(queue)<1:
+        print('end of queue')
+        return backtrack_cost_table(original, destination)
+
+    next_vertex = queue[len(queue)-1]
+    queue = queue[:-1]
+    return djikstra_time(next_vertex, destination, original, queue)
+
 
 def backtrack_cost_table(origin, destination):
     # print('cost table')
@@ -149,4 +174,4 @@ def backtrack_cost_table(origin, destination):
 #             return e['distance']
 
 init()
-print(djikstra('CPH', 'SCO'))
+print(djikstra('CPH', 'SCO', False))
