@@ -1,7 +1,13 @@
-# airlines-graph
-applying breadth first, depth first, djikstras shortest path to a graph of airlines
+# Airline-Graph
 
-working so far:
-- breadth first algorithm
+- [x] 1 Find if an airport can be reached from another using only a single airline company. You should compare
+- [x] Breadth-first
+- [x] Depth-first
 
-results of depth first and djikstra functions needs to be verified
+- [x] 2 Finding shortest path (distance) from one location to another (Dijk-stra's Algorithm)
+
+- [ ] 3 Finding shortest path (time) from one location to another, assuming that each transfer takes one hour. 
+
+- [ ] 4 Finding airline that has widest coverage (Minimum Spanning Tree)
+
+Defend the choice of datastructure with regard of time and space complexity (Big O)
