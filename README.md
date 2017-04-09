@@ -6,7 +6,7 @@
 
 - [x] 2 Finding shortest path (distance) from one location to another (Dijk-stra's Algorithm)
 
-- [ ] 3 Finding shortest path (time) from one location to another, assuming that each transfer takes one hour. 
+- [x] 3 Finding shortest path (time) from one location to another, assuming that each transfer takes one hour. 
 
 - [ ] 4 Finding airline that has widest coverage (Minimum Spanning Tree)
 
