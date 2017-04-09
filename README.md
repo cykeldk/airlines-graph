@@ -5,13 +5,6 @@
 - [x] Depth-first
 - [x] Compare BFS & DFS
 
-BFS == stack
-DFS == queue
-That heavily depends on the structure of the search tree and the number and location of solutions (aka searched-for items). If you know a solution is not far from the root of the tree, a breadth first search (BFS) might be better. If the tree is very deep and solutions are rare, depth first search (DFS) might take an extremely long time, but BFS could be faster. If the tree is very wide, a BFS might need too much memory, so it might be completely impractical
-
-We have to find out if it its possible to travel from an airport to another, it can go through other airports, and therefore it will be a very deep tree.
-
-
 
 - [x] 2 Finding shortest path (distance) from one location to another (Dijk-stra's Algorithm)
 
@@ -24,6 +17,12 @@ We have to find out if it its possible to travel from an airport to another, it 
 
 
 
+### BFS and DFS Comparison
+BFS == stack
+DFS == queue
+That heavily depends on the structure of the search tree and the number and location of solutions (aka searched-for items). If you know a solution is not far from the root of the tree, a breadth first search (BFS) might be better. If the tree is very deep and solutions are rare, depth first search (DFS) might take an extremely long time, but BFS could be faster. If the tree is very wide, a BFS might need too much memory, so it might be completely impractical
+
+We have to find out if it its possible to travel from an airport to another, it can go through other airports, and therefore it will be a very deep tree.
 
 
 
