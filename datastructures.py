@@ -3,6 +3,7 @@ from collections import defaultdict
 from pprint import pprint
 import math
 import sys
+from tqdm import tqdm
 
 sys.setrecursionlimit(5000)
 
@@ -42,24 +43,42 @@ def run():
         # get input - switch case - run function based on input (with parameters)
         pass
 
-def breadth_first(origin, destination, visited=[], queue=[]):
+def single_airline(origin, destination, breadth=True):
+    airline_list = set()
+    for e in edges:
+        if e['source_code']==origin:
+            airline_list.add(e['airline_code'])
+    if breadth:
+        for a in tqdm(airline_list):
+            # print('airline', a)
+            if breadth_first(origin, destination, a):
+                return True
+    else:
+        for a in tqdm(airline_list):
+            # print('airline', a)
+            if depth_first(origin, destination, a):
+                return True
+    return False
+
+
+def breadth_first(origin, destination, airline, visited=[], queue=[]):
     # get origin's neighbours and add them to the queue
     visited.append(origin)
     if origin == destination:
-        return visited
+        return True
     for e in edges:
-        if e['source_code']==origin:
+        if e['source_code']==origin and e['airline_code']==airline:
             # if e['destination_code']==destination:
             #     return visited + [destination]
             if e['destination_code'] not in visited and e['destination_code'] not in queue:
                 queue.append(e['destination_code'])
 
-    # if len(queue)<1:
-    #     return None
+    if len(queue)<1:
+        return False
 
     next_vertex = queue[0]
     queue = queue[1:]
-    return breadth_first(next_vertex, destination, visited, queue)
+    return breadth_first(next_vertex, destination, airline, visited, queue)
 
 def depth_first(origin, destination, visited=[], queue=[]):
     # get origin's neighbours and add them to the queue
@@ -75,12 +94,12 @@ def depth_first(origin, destination, visited=[], queue=[]):
             if e['destination_code'] not in visited and e['destination_code'] not in queue:
                 queue.append(e['destination_code'])
 
-    # if len(queue)<1:
-    #     return None
+    if len(queue)<1:
+        return None
 
     next_vertex = queue[len(queue)-1]
     queue = queue[:-1]
-    return depth_first(next_vertex, destination, visited, queue)
+    return depth_first(next_vertex, destination, airline, visited, queue)
 
 
 def djikstra(origin, destination, by_distance=True):
@@ -178,4 +197,5 @@ def backtrack_cost_table(origin, destination):
 #             return e['distance']
 
 init()
-print(breadth_first('CPH', 'HNL'))
+# print(breadth_first('CPH', 'HNL'))
+print(single_airline('CPH', 'HNL'))
