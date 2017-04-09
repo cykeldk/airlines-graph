@@ -17,15 +17,11 @@ cost_table = {}
 def init():
     with open('data/airports.txt', 'r', encoding='latin1') as f:
         airport_headers = [item.rstrip().lstrip() for item in f.readline().split(';')]
-
         f.seek(0)
         print(airport_headers)
         csv_reader = csv.reader(f, delimiter=';')
-
         for row in csv_reader:
-
             vertices.update({row[0]:{'code': row[0], 'name': row[1], 'city': row[2], 'country': row[3], 'latitude': row[4], 'longitude': row[5]}})
-
 
     with open('data/routes.txt', 'r', encoding='latin1') as f:
         route_headers = [item.rstrip().lstrip() for item in f.readline().split(';')]
@@ -33,12 +29,9 @@ def init():
         f.seek(0)
         csv_reader = csv.reader(f, delimiter=';')
         for row in csv_reader:
-            # print(row)
             edges.append({'airline_code':row[0], 'source_code':row[1], 'destination_code': row[2], 'distance':row[3], 'time':row[4]})
 
-    #pprint(vertices)
-
-# not in use (yet)
+# not in use (yet) should probably be in air-net.py
 def run():
     init()
     running = True
@@ -49,14 +42,18 @@ def run():
 def breadth_first(origin, destination, visited=[], queue=[]):
     # get origin's neighbours and add them to the queue
     # print('queue', queue)
+    print('added {0} to the visited list'.format(origin))
     visited.append(origin)
+
     if origin == destination:
         return visited
     for e in edges:
-        # print(e)
-        if e['source_code']==origin and e['destination_code'] not in visited:
-            # print('found route from ', origin)
-            queue.append(e['destination_code'])
+        if e['source_code']==origin:
+            if e['destination_code']==destination:
+                return visited + [destination]
+            if e['destination_code'] not in visited and e['destination_code'] not in queue:
+                print('found route from {0} to {1}'.format(origin, e['destination_code']))
+                queue.append(e['destination_code'])
 
     if len(queue)<1:
         return None
@@ -66,13 +63,20 @@ def breadth_first(origin, destination, visited=[], queue=[]):
     return breadth_first(next_vertex, destination, visited, queue)
 
 def depth_first(origin, destination, visited=[], queue=[]):
+    # get origin's neighbours and add them to the queue
+    # print('queue', queue)
+    # print('added {0} to the visited list'.format(origin))
     visited.append(origin)
+
     if origin == destination:
         return visited
     for e in edges:
-        if e['source_code']==origin and e['destination_code'] not in visited:
-            # print('found route from ', origin)
-            queue.append(e['destination_code'])
+        if e['source_code']==origin:
+            if e['destination_code']==destination:
+                return visited + [destination]
+            if e['destination_code'] not in visited and e['destination_code'] not in queue:
+                # print('found route from {0} to {1}'.format(origin, e['destination_code']))
+                queue.append(e['destination_code'])
 
     if len(queue)<1:
         return None
@@ -116,7 +120,7 @@ def djikstra_distance(origin, destination, original=None, queue=[]):
                 cost_table[e['destination_code']]['parent']= origin
     # we're lost!
     if len(queue)<1:
-        print('end of queue')
+        print('end of queue, the airport was not connected')
         return None
 
     next_vertex = queue[0]
@@ -138,10 +142,8 @@ def djikstra_time(origin, destination, original=None, queue=[]):
         if e['source_code']==origin:
             if cost_table[e['destination_code']]['visited'] == False and e['destination_code'] not in queue:
                 queue.append(e['destination_code'])
-
+            # check if current route is cheaper than the one in cost_table
             if float(e['time']) + cost_table[origin]['cost'] + 1 < cost_table[e['destination_code']]['cost']:
-
-                # print('found cheaper route from {0} to {1}'.format(e['source_code'], e['destination_code'], e['time']))
                 cost_table[e['destination_code']]['cost'] = float(e['time']) + cost_table[origin]['cost'] + 1
                 cost_table[e['destination_code']]['parent']= origin
 
@@ -156,15 +158,7 @@ def djikstra_time(origin, destination, original=None, queue=[]):
 
 
 def backtrack_cost_table(origin, destination):
-    # print('cost table')
-    # pprint(cost_table)
-
-    #
-    print('running backtrack from:\n{0}\nto:\n{1}\n'.format(cost_table[destination], cost_table[origin]) )
-    # for k, v in cost_table.items():
-    #     if v['visited']==True:
-    #         print('airport: {0} route: {1}'.format(k,v))
-
+    print('backtracking from:\n{0}\nto:\n{1}\n'.format(cost_table[destination], cost_table[origin]) )
     path = []
     current = destination
     print('current',current)
@@ -174,7 +168,7 @@ def backtrack_cost_table(origin, destination):
         path.append(current)
         current = cost_table[current]['parent']
     path.append(origin)
-    print('the path: {0}'.format(path))
+    # print('the path: {0}'.format(path))
     path.reverse()
     return path
 
@@ -187,4 +181,4 @@ def backtrack_cost_table(origin, destination):
 #             return e['distance']
 
 init()
-print(breadth_first('THU', 'LAX'))
+print(depth_first('CPH', 'HNL'))
