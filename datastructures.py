@@ -2,6 +2,9 @@ import csv
 from collections import defaultdict
 from pprint import pprint
 import math
+import sys
+
+sys.setrecursionlimit(5000)
 
 airport_headers = []
 route_headers = []
@@ -41,22 +44,18 @@ def run():
 
 def breadth_first(origin, destination, visited=[], queue=[]):
     # get origin's neighbours and add them to the queue
-    # print('queue', queue)
-    print('added {0} to the visited list'.format(origin))
     visited.append(origin)
-
     if origin == destination:
         return visited
     for e in edges:
         if e['source_code']==origin:
-            if e['destination_code']==destination:
-                return visited + [destination]
+            # if e['destination_code']==destination:
+            #     return visited + [destination]
             if e['destination_code'] not in visited and e['destination_code'] not in queue:
-                print('found route from {0} to {1}'.format(origin, e['destination_code']))
                 queue.append(e['destination_code'])
 
-    if len(queue)<1:
-        return None
+    # if len(queue)<1:
+    #     return None
 
     next_vertex = queue[0]
     queue = queue[1:]
@@ -64,22 +63,20 @@ def breadth_first(origin, destination, visited=[], queue=[]):
 
 def depth_first(origin, destination, visited=[], queue=[]):
     # get origin's neighbours and add them to the queue
-    # print('queue', queue)
-    # print('added {0} to the visited list'.format(origin))
+    # the lines that were commented out, makes a shortcut, if the destination is neighbour to the current vertex
     visited.append(origin)
 
     if origin == destination:
         return visited
     for e in edges:
         if e['source_code']==origin:
-            if e['destination_code']==destination:
-                return visited + [destination]
+            # if e['destination_code']==destination:
+            #     return visited + [destination]
             if e['destination_code'] not in visited and e['destination_code'] not in queue:
-                # print('found route from {0} to {1}'.format(origin, e['destination_code']))
                 queue.append(e['destination_code'])
 
-    if len(queue)<1:
-        return None
+    # if len(queue)<1:
+    #     return None
 
     next_vertex = queue[len(queue)-1]
     queue = queue[:-1]
@@ -181,4 +178,4 @@ def backtrack_cost_table(origin, destination):
 #             return e['distance']
 
 init()
-print(depth_first('CPH', 'HNL'))
+print(breadth_first('CPH', 'HNL'))
