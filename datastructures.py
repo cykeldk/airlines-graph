@@ -79,7 +79,7 @@ def depth_first(origin, destination, visited=[], queue=[]):
 
     next_vertex = queue[len(queue)-1]
     queue = queue[:-1]
-    return breadth_first(next_vertex, destination, visited, queue)
+    return depth_first(next_vertex, destination, visited, queue)
 
 
 def djikstra(origin, destination, by_distance=True):
@@ -95,40 +95,49 @@ def djikstra(origin, destination, by_distance=True):
     else:
         return djikstra_time(origin, destination)
 
-def djikstra_distance(origin, destination, visited=[], queue=[]):
-
-    visited.append(origin)
-    cost_table[origin]['visited']==True
+def djikstra_distance(origin, destination, original=None, queue=[]):
+    if not original:
+        original = origin
+    cost_table[origin]['visited']=True
     if origin == destination:
-        print('found destination', cost_table)
-        return backtrack_cost_table(origin, destination)
+        print('found destination')
+        return backtrack_cost_table(original, destination)
     for e in edges:
         if e['source_code']==origin:
-            if e['destination_code'] not in visited:
-                queue.append(e['destination_code'])
+            if cost_table[destination]['visited']== False:
+                queue.append(destination)
 
             if float(e['distance']) + cost_table[origin]['cost'] < cost_table[destination]['cost']:
                 cost_table[destination]['cost'] = float(e['distance']) + cost_table[origin]['cost']
                 cost_table[destination]['parent']= origin
 
     if len(queue)<1:
-        print('end of queue', cost_table)
-        return backtrack_cost_table(origin, destination)
+        print('end of queue')
+        return backtrack_cost_table(original, destination)
 
     next_vertex = queue[len(queue)-1]
     queue = queue[:-1]
-    return breadth_first(next_vertex, destination, visited, queue)
+    return djikstra_distance(next_vertex, destination, original, queue)
 
 
-def backtrack_cost_table(origin, destination, path=None):
-    # print('cost table', cost_table)
-    # print(cost_table)
+def backtrack_cost_table(origin, destination):
+    # print('cost table')
+    # pprint(cost_table)
+    print('running backtrack from:\n{0}\nto:\n{1}\n'.format(cost_table[destination], cost_table[origin]) )
+    for v in cost_table.values():
+        if v['visited']==True:
+            print(v)
+
     path = []
     current = destination
-    while current != destination:
+    print('current',current)
+    print('origin', origin)
+    while current != origin:
+        print('adding {0} to the path'.format(current))
         path.append(current)
         current = cost_table[current]['parent']
-
+    path.append(origin)
+    print('the path: {0}'.format(path))
     return path.reverse()
 
 
@@ -140,4 +149,4 @@ def backtrack_cost_table(origin, destination, path=None):
 #             return e['distance']
 
 init()
-print(djikstra('LED', 'SCO'))
+print(djikstra('CPH', 'SCO'))
