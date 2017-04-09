@@ -85,14 +85,15 @@ def depth_first(origin, destination, visited=[], queue=[]):
 def djikstra(origin, destination, by_distance=True):
     cost_table.clear()
     for v in vertices.keys():
-        # print(v)
         if v==origin:
             cost_table.update({v:{'visited': False, 'cost': 0, 'parent': v}})
         else:
             cost_table.update({v:{'visited': False, 'cost': math.inf, 'parent': None}})
     if by_distance:
+        print('finding shortest route between {0} and {1}'.format(origin, destination))
         return djikstra_distance(origin, destination)
     else:
+        print('finding fastest route between {0} and {1}'.format(origin, destination))
         return djikstra_time(origin, destination)
 
 def djikstra_distance(origin, destination, original=None, queue=[]):
@@ -100,35 +101,30 @@ def djikstra_distance(origin, destination, original=None, queue=[]):
     cost_table[origin]['visited']=True
     if not original:
         original = origin
-
+    # are we there yet?
     if origin == destination:
         print('found destination')
         return backtrack_cost_table(original, destination)
-
-
+    # i want ice-cream!
     for e in edges:
         if e['source_code']==origin:
             if cost_table[e['destination_code']]['visited'] == False and e['destination_code'] not in queue:
                 queue.append(e['destination_code'])
-
+            # check if route to edges destination_code is cheaper, if it is, update cost in cost_table
             if float(e['distance']) + cost_table[origin]['cost'] < cost_table[e['destination_code']]['cost']:
-
-                # print('found cheaper route from {0} to {1}'.format(e['source_code'], e['destination_code'], e['distance']))
                 cost_table[e['destination_code']]['cost'] = float(e['distance']) + cost_table[origin]['cost']
                 cost_table[e['destination_code']]['parent']= origin
-
+    # we're lost!
     if len(queue)<1:
         print('end of queue')
         return None
 
     next_vertex = queue[0]
     queue = queue[1:]
-    # print('recursive call', len(queue))
     return djikstra_distance(next_vertex, destination, original, queue)
 
 def djikstra_time(origin, destination, original=None, queue=[]):
     transit_time = 60
-    # print('queue', queue)
     cost_table[origin]['visited']=True
     if not original:
         original = origin
@@ -191,4 +187,4 @@ def backtrack_cost_table(origin, destination):
 #             return e['distance']
 
 init()
-print(djikstra('THU', 'LAX', True))
+print(breadth_first('THU', 'LAX'))
