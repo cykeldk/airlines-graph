@@ -31,7 +31,7 @@ We have to find out if it its possible to travel from an airport to another, it 
 Note:
 advantages / disadvantages of Dicts vs Lists
 
-When the keys of the dictionary are 0, 1, ..., n, a list will be faster, since no hashing is involved. As soon as the keys are not such a sequence, you need to use a dict.
+When the keys of the dictionary are 0, 1, ..., n, a list will be faster, since no hashing is involved. As soon as the keys are not such a sequence, a dict its the better choice.
 
 In this case it would have been faster and more effecient to use a list.
 
